@@ -96,7 +96,7 @@
     "build-perf": "browserify tests/performance/*.js > tests/performance-bundle.js"
   },
   "browser": {
-    "./deps/buffer": false,
+    "./lib/deps/buffer": false,
     "request": false,
     "crypto": false,
     "./adapters/leveldb/leveldb": false,
