@@ -595,6 +595,23 @@ adapters.forEach(function (adapters) {
       });
     });
 
+    it('4351 Testing special characters', function () {
+      var db = new PouchDB(dbs.remote);
+      var doc = {
+        _id: '_design/index',
+        views: {
+          index:
+          { map: 'function (doc) { emit(doc._id); }' }
+        }
+      };
+      var docs = [{_id: 'a' },{_id: 'zřícenina'}, {_id: 'z' }, doc];
+      return db.bulkDocs({docs: docs}).then(function () {
+        return db.query('index', {key : 'zřícenina'});
+      }).then(function (res) {
+        res.rows.should.have.length(1);
+      });
+    });
+
     it('Destroy view when db created with {name: foo}', function () {
       var db = new PouchDB({name: dbs.name});
       var doc = {
