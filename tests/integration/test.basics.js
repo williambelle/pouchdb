@@ -1036,9 +1036,8 @@ adapters.forEach(function (adapter) {
       return db.put(doc).then(function () {
         return db.get(doc._id);
       }).then(function (savedDoc) {
-        // We shouldnt need to delete from doc here (#4273)
-        delete doc._rev;
-        delete doc._rev_tree;
+        should.not.exist(doc._rev);
+        should.not.exist(doc._rev_tree);
 
         delete savedDoc._rev;
         savedDoc.should.deep.equal(doc);
