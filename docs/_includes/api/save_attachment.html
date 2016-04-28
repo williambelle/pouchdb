@@ -48,7 +48,7 @@ db.putAttachment('doc', 'att.txt', attachment, 'text/plain').then(function (resu
 
 
 #### Example Response:
-{% highlight js %}
+{% highlight json %}
 {
   "ok": true,
   "id": "doc",
@@ -254,7 +254,7 @@ var doc = {
       "att.txt": {
         "content_type": "text/plain",
         "data": new Blob(
-          ["And she's hooked to the silver screen"], 
+          ["And she's hooked to the silver screen"],
           {type: 'text/plain'})
       },
       "att2.txt": {

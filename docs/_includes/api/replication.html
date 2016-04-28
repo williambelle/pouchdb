@@ -19,7 +19,7 @@ All options default to `false` unless otherwise specified.
 
 * `options.filter`: Reference a filter function from a design document to selectively get updates. To use a view function, pass `_view` here and provide a reference to the view function in `options.view`. See [filtered replication](#filtered-replication) for details.
 * `options.doc_ids`: Only show changes for docs with these ids (array of strings).
-* `options.query_params`: Object containing properties that are passed to the filter function, e.g. `{"foo:"bar"}`, where `"bar"` will be available in the filter function as `params.query.foo`. To access the `params`, define your filter function like `function (doc, params) {/* ... */}`.
+* `options.query_params`: Object containing properties that are passed to the filter function, e.g. `{"foo":"bar"}`, where `"bar"` will be available in the filter function as `params.query.foo`. To access the `params`, define your filter function like `function (doc, params) {/* ... */}`.
 * `options.view`: Specify a view function (e.g. `'design_doc_name/view_name'` or `'view_name'` as shorthand for `'view_name/view_name'`) to act as a filter. Documents counted as "passed" for a view filter if a map function emits at least one record for them. **Note**: `options.filter` must be set to `'_view'` for this option to work.
 
 **Advanced Options:**
@@ -112,7 +112,7 @@ For non-live replications, the returned object is also an event emitter as well 
 
 Example response in the `'change'` listener:
 
-{% highlight js %}
+{% highlight json %}
 {
   "doc_write_failures": 0,
   "docs_read": 1,
@@ -122,16 +122,16 @@ Example response in the `'change'` listener:
   "ok": true,
   "start_time": "Fri May 16 2014 18:23:12 GMT-0700 (PDT)",
   "docs": [
-    { _id: 'docId',
-      _rev: '1-e798a1a7eb4247b399dbfec84ca699d4',
-      and: 'data' }
+    { "_id": "docId",
+      "_rev": "1-e798a1a7eb4247b399dbfec84ca699d4",
+      "and": "data" }
   ]
 }
 {% endhighlight %}
 
 Example response in the `'complete'` listener:
 
-{% highlight js %}
+{% highlight json %}
 {
   "doc_write_failures": 0,
   "docs_read": 2,
@@ -216,14 +216,14 @@ remote.replicate.to(local, {
 First `put()` a design document in the remote database:
 
 {% highlight js %}
-{
+db.put({
   _id: '_design/mydesign',
   filters: {
     myfilter: function (doc) {
       return doc.type === 'marsupial';
     }.toString()
   }
-}
+});
 {% endhighlight %}
 
 Then filter by `type === 'marsupial'`:
@@ -241,14 +241,14 @@ This is the most powerful way to filter, because it allows you to pass in arbitr
 First `put()` a design document in the remote database:
 
 {% highlight js %}
-{
+db.put({
   _id: '_design/mydesign',
   filters: {
     myfilter: function (doc, req) {
       return doc.type === req.query.type;
     }.toString()
   }
-}
+});
 {% endhighlight %}
 
 Then filter by `type === 'marsupial'`:
@@ -269,7 +269,7 @@ Any documents that `emit()` anything will be considered to have passed this filt
 First `put()` a design document in the remote database:
 
 {% highlight js %}
-{
+db.put({
   _id: '_design/mydesign',
   views: {
     myview: {
@@ -280,7 +280,7 @@ First `put()` a design document in the remote database:
       }.toString()
     }
   }
-}
+});
 {% endhighlight %}
 
 Then filter by `type === 'marsupial'`:

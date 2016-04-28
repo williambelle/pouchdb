@@ -163,7 +163,7 @@ db.put(ddoc).catch(function (err) {
 {% include code/end.html %}
 
 #### Example Response:
-{% highlight js %}
+{% highlight json %}
 {
   "offset" : 0,
   "rows": [{
@@ -230,7 +230,7 @@ db.query(map).then(function (result) {
 {% include code/end.html %}
 
 #### Example Response:
-{% highlight js %}
+{% highlight json %}
 {
   "offset": 0,
   "rows": [{
@@ -311,7 +311,7 @@ db.query(map, {include_docs : true}).then(function (result) {
 
 #### Example response:
 
-{% highlight js %}
+{% highlight json %}
 {
     "offset": 0,
     "rows": [

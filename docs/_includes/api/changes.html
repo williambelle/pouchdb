@@ -28,7 +28,7 @@ All options default to `false` unless otherwise specified.
 
 * `options.filter`: Reference a filter function from a design document to selectively get updates. To use a view function, pass `_view` here and provide a reference to the view function in `options.view`. See [filtered changes](#filtered-changes) for details.
 * `options.doc_ids`: Only show changes for docs with these ids (array of strings).
-* `options.query_params`: Object containing properties that are passed to the filter function, e.g. `{"foo:"bar"}`, where `"bar"` will be available in the filter function as `params.query.foo`. To access the `params`, define your filter function like `function (doc, params) {/* ... */}`.
+* `options.query_params`: Object containing properties that are passed to the filter function, e.g. `{"foo":"bar"}`, where `"bar"` will be available in the filter function as `params.query.foo`. To access the `params`, define your filter function like `function (doc, params) {/* ... */}`.
 * `options.view`: Specify a view function (e.g. `'design_doc_name/view_name'` or `'view_name'` as shorthand for `'view_name/view_name'`) to act as a filter. Documents counted as "passed" for a view filter if a map function emits at least one record for them. **Note**: `options.filter` must be set to `'_view'` for this option to work.
 
 **Advanced Options:**
@@ -56,17 +56,17 @@ changes.cancel(); // whenever you want to cancel
 {% endhighlight %}
 
 #### Example Response:
-{% highlight js %}
+{% highlight json %}
 {
-  "id":"somestuff",
-  "seq":21,
-  "changes":[{
-    "rev":"1-8e6e4c0beac3ec54b27d1df75c7183a8"
+  "id": "somestuff",
+  "seq": 21,
+  "changes": [{
+    "rev": "1-8e6e4c0beac3ec54b27d1df75c7183a8"
   }],
-  "doc":{
-    "title":"Ch-Ch-Ch-Ch-Changes",
-    "_id":"someDocId",
-    "_rev":"1-8e6e4c0beac3ec54b27d1df75c7183a8"
+  "doc": {
+    "title": "Ch-Ch-Ch-Ch-Changes",
+    "_id": "someDocId",
+    "_rev": "1-8e6e4c0beac3ec54b27d1df75c7183a8"
   }
 }
 {% endhighlight %}
@@ -81,34 +81,34 @@ changes.cancel(); // whenever you want to cancel
 
 Example response in the `'change'` listener (using `{include_docs: true}`):
 
-{% highlight js %}
-{ id: 'doc1',
-  changes: [ { rev: '1-9152679630cc461b9477792d93b83eae' } ],
-  doc: {
-    _id: 'doc1',
-    _rev: '1-9152679630cc461b9477792d93b83eae'
+{% highlight json %}
+{ "id": "doc1",
+  "changes": [ { "rev": "1-9152679630cc461b9477792d93b83eae" } ],
+  "doc": {
+    "_id": "doc1",
+    "_rev": "1-9152679630cc461b9477792d93b83eae"
   },
-  seq: 1
+  "seq": 1
 }
 {% endhighlight %}
 
 Example response in the `'change'` listener when a doc was deleted:
 
-{% highlight js %}
-{ id: 'doc2',
-  changes: [ { rev: '2-9b50a4b63008378e8d0718a9ad05c7af' } ],
-  doc: { _id: 'doc2',
-    _rev: '2-9b50a4b63008378e8d0718a9ad05c7af',
-    _deleted: true
+{% highlight json %}
+{ "id": "doc2",
+  "changes": [ { "rev": "2-9b50a4b63008378e8d0718a9ad05c7af" } ],
+  "doc": { "_id": "doc2",
+    "_rev": "2-9b50a4b63008378e8d0718a9ad05c7af",
+    "_deleted": true
   },
-  deleted: true,
-  seq: 3
+  "deleted": true,
+  "seq": 3
 }
 {% endhighlight %}
 
 Example response in the `'complete'` listener:
 
-{% highlight js %}
+{% highlight json %}
 {
   "results": [
     {
@@ -184,7 +184,7 @@ db.changes({
 
 #### Example Response:
 
-{% highlight js %}
+{% highlight json %}
 {
   "results": [{
     "id": "0B3358C1-BA4B-4186-8795-9024203EB7DD",
@@ -239,11 +239,11 @@ The named functions can either be specified with `'designdoc_id/function_name'` 
 
 In these examples, we'll work with some mammals. Let's imagine our docs are:
 
-{% highlight js %}
+{% highlight json %}
 [
-  {_id: 'a', name: 'Kangaroo', type: 'marsupial'},
-  {_id: 'b', name: 'Koala', type: 'marsupial'},
-  {_id: 'c', name: 'Platypus', type: 'monotreme'}
+  {"_id": "a", "name": "Kangaroo", "type": "marsupial"},
+  {"_id": "b", "name": "Koala", "type": "marsupial"},
+  {"_id": "c", "name": "Platypus", "type": "monotreme"}
 ]
 {% endhighlight %}
 
@@ -278,14 +278,14 @@ db.changes({
 First `put()` a design document:
 
 {% highlight js %}
-{
+db.put({
   _id: '_design/mydesign',
   filters: {
     myfilter: function (doc) {
       return doc.type === 'marsupial';
     }.toString()
   }
-}
+});
 {% endhighlight %}
 
 Then filter by `type === 'marsupial'`:
@@ -303,14 +303,14 @@ This is the most powerful way to filter, because it allows you to pass in arbitr
 First `put()` a design document:
 
 {% highlight js %}
-{
+db.put({
   _id: '_design/myfilter',
   filters: {
     myfilter: function (doc, req) {
       return doc.type === req.query.type;
     }.toString()
   }
-}
+});
 {% endhighlight %}
 
 Then filter by `type === 'marsupial'`:
@@ -333,7 +333,7 @@ Any documents that `emit()` anything will be considered to have passed this filt
 First `put()` a design document:
 
 {% highlight js %}
-{
+db.put({
   _id: '_design/mydesign',
   views: {
     myview: function (doc) {
@@ -342,7 +342,7 @@ First `put()` a design document:
       }
     }.toString()
   }
-}
+});
 {% endhighlight %}
 
 Then filter by `type === 'marsupial'`:
